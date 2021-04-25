@@ -57,13 +57,14 @@ def login(loginFormPage, allLoginParams):
         print("Login Successful!")
 
 
-def getUID(sess) -> str:
+def getUID() -> str:
     response = sess.post(config.uid_query_url)
+    print(response.text)
     j = json.loads(response.text)
     return j["ID"]
 
 
-def getExcelRawData(UID) -> requests.Response:
+def writeExcel(UID):
     excel_params = {
         "format": "excel",
         "_filename_": "export"
@@ -77,15 +78,9 @@ E4%B8%BB%E9%A1%B5%E8%AF%BE%E8%A1%A8%E5%AF%BC%E5%87%BA.cpt%22%2C%22xn%22%3A%22202
     if response.status_code != 200:
         raise HTTPError(str(response.status_code))
     else:
-        return response
+        pass
 
-
-_1, _2 = get_text()
-login(_1, _2)
-uid    = getUID(sess)
-excel_file = getExcelRawData(uid)
-
-with open(config.excel_file_path, 'wb') as fp:
-    for chunk in excel_file.iter_content(chunk_size=4096):
-        if chunk:
-            fp.write(chunk)
+    with open(config.excel_file_path, 'wb') as fp:
+        for chunk in response.iter_content(chunk_size=4096):
+            if chunk:
+                fp.write(chunk)

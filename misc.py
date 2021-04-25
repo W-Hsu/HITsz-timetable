@@ -41,7 +41,7 @@ def get_class_end_time(i) -> datetime.timedelta:
     return get_class_start_time(i) + datetime.timedelta(hours=1, minutes=45)
 
 
-class LoopEndError(RuntimeError):
+class StopLoop(RuntimeError):
     pass
 
 
