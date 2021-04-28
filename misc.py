@@ -45,6 +45,11 @@ class StopLoop(RuntimeError):
     pass
 
 
+class CrawlerError(RuntimeError):
+    def __init__(self, error_message):
+        super(CrawlerError, self).__init__(error_message)
+
+
 class UTC(datetime.tzinfo):
     """UTC"""
     def __init__(self, offset=0):

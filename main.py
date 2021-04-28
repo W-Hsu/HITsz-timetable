@@ -11,7 +11,6 @@ crawlExcel.login(form_url, form_inputs)
 uid = crawlExcel.getUID()
 crawlExcel.writeExcel(uid)
 
-
 cal_raw_data = processExcel.process()
 
 genIcs.gen(cal_raw_data)

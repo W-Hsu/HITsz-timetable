@@ -12,7 +12,6 @@ import json
 
 # Initialize a requests.Session with a header sqecified with config.header
 sess = requests.Session()
-sess.headers.update(config.headers)
 
 
 # GET login page
@@ -20,8 +19,16 @@ sess.headers.update(config.headers)
 # returns:
 # - URL of form action page
 # - ALL website default input key-values
-def get_text() -> typing.Tuple[str, dict]:
-    response = sess.get(config.domain + config.login_page_url)
+def get_text() -> str, dict:
+    sess.headers.update({
+        "Connection": "keep-alive",
+        "Cache-Control": "max-age=0",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "zh-CN,zh;q=0.9"
+    })
+    response = sess.get(config.login_page_url)
     
     if response.status_code != 200:
         raise HTTPError("Error getting login page.")
@@ -64,7 +71,7 @@ def getUID() -> str:
     return j["ID"]
 
 
-def writeExcel(UID):
+def getExcelDate(UID) -> bytes:
     excel_params = {
         "format": "excel",
         "_filename_": "export"
@@ -72,7 +79,7 @@ def writeExcel(UID):
     # YES. I think that's ugly too. But I'm lazy ;)
     excel_params["reportlets"] = """%5B%7B%22reportlet%22%3A%22%2Fbyyt%2Fpkgl%2F%E5%AD%A6%E7%94%9F%\
 E4%B8%BB%E9%A1%B5%E8%AF%BE%E8%A1%A8%E5%AF%BC%E5%87%BA.cpt%22%2C%22xn%22%3A%222020-2021%22%2C%22xq%2\
-2%3A%222%22%2C%22dm%22%3A%22""" + UID + "%22%7D%5D"
+2%3A%22 2 %22%2C%22dm%22%3A%22""" + UID + "%22%7D%5D"
 
     response = sess.post(config.excel_export_url, params=excel_params)
     if response.status_code != 200:
