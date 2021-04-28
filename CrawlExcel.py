@@ -1,8 +1,9 @@
 # coding: utf-8
 
-from requests.cookies import RequestsCookieJar
 from requests.models import HTTPError
+from interface import config
 
+import typing
 import config
 import typing
 import requests
@@ -19,7 +20,7 @@ sess = requests.Session()
 # returns:
 # - URL of form action page
 # - ALL website default input key-values
-def get_text() -> str, dict:
+def get_text() -> typing.Tuple(str, dict):
     sess.headers.update({
         "Connection": "keep-alive",
         "Cache-Control": "max-age=0",
@@ -50,9 +51,9 @@ def get_text() -> str, dict:
 
 # log in jw system
 def login(loginFormPage, allLoginParams):
-    # Override allLoginParams with values specified in config.login_params
-    for kv in config.login_params.items():
-        allLoginParams[kv[0]] = kv[1];
+    # Add the given username and password into login params.
+    allLoginParams["username"] = config.CrawlerParams.username
+    allLoginParams["password"] = config.CrawlerParams.password
 
     # Request a page
     response = sess.post(config.domain+loginFormPage, params=allLoginParams)
@@ -71,7 +72,7 @@ def getUID() -> str:
     return j["ID"]
 
 
-def getExcelDate(UID) -> bytes:
+def getExcelRawData(UID) -> bytes:
     excel_params = {
         "format": "excel",
         "_filename_": "export"
@@ -87,7 +88,4 @@ E4%B8%BB%E9%A1%B5%E8%AF%BE%E8%A1%A8%E5%AF%BC%E5%87%BA.cpt%22%2C%22xn%22%3A%22202
     else:
         pass
 
-    with open(config.excel_file_path, 'wb') as fp:
-        for chunk in response.iter_content(chunk_size=4096):
-            if chunk:
-                fp.write(chunk)
+    return response.content

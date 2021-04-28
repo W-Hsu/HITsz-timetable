@@ -19,6 +19,7 @@ def gen(processed_excel):
                 for week in each_class["weeks"]:
                     config.start_date = config.start_date
                     target_date = config.start_date + datetime.timedelta(weeks=week-1, days=day)
+                    
                     start_datetime = target_date + misc.get_class_start_time(time_pnt)
                     end_datetime = target_date + misc.get_class_end_time(time_pnt)
 

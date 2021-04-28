@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from io import BytesIO
+
 import config
 import openpyxl
 import re
@@ -7,9 +9,11 @@ import misc
 
 from classParser import lexer, syntaxParser
 
+def process(excel_raw_data):
+    if not isinstance(excel_raw_data, bytes):
+        raise RuntimeError("")
 
-def process():
-    workbook = openpyxl.load_workbook(config.excel_file_path)
+    workbook = openpyxl.load_workbook(filename=BytesIO(excel_raw_data), read_only=True)
     worksheet= workbook.active
 
     orig_col = 0

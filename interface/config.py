@@ -2,6 +2,7 @@
 
 import datetime
 import misc
+import typing
 
 #==============================#
 # Excel Crawler Configurations #
@@ -27,7 +28,7 @@ class DateTime:
     start_date = None  # datetime.datetime(2021, 2, 22, 0, 0, 0, 0, tzinfo=misc.UTC(8))
     
     # returns year and semester number
-    def semester() -> str, int:
+    def semester() -> typing.Tuple(str, int):
         start_date = Datetime.start_date
         start_date = datetime.datetime()
 
