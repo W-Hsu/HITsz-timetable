@@ -11,7 +11,6 @@ def gen(processed_excel):
     ical["verison"] = "2.0"
     ical["x-wr-calname"] = "2021春课表"
 
-
     for day in range(0, 7):
         for time_pnt in range(0, 6):
          for each_class in processed_excel[day][time_pnt]:

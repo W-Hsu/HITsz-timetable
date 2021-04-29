@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from errors import *
 
 def getWeeks(s) -> list:
     s = s[0:len(s)-1]

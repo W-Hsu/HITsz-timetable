@@ -1,13 +1,12 @@
 # coding: utf-8
 
 from io import BytesIO
+from excelParser import lexer, syntaxParser
 
 import config
 import openpyxl
 import re
 import misc
-
-from classParser import lexer, syntaxParser
 
 def process(excel_raw_data):
     if not isinstance(excel_raw_data, bytes):

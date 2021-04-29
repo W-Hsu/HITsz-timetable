@@ -1,6 +1,5 @@
 # coding: utf-8
 
-
 def space_sub(c):
     if c==' ':
         return '_'

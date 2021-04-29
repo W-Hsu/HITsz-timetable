@@ -1,7 +1,7 @@
 #! coding: utf-8
 
 import datetime
-
+import typing
 
 def isChinese(s) -> bool:
     if len(s) == 0:
@@ -41,13 +41,23 @@ def get_class_end_time(i) -> datetime.timedelta:
     return get_class_start_time(i) + datetime.timedelta(hours=1, minutes=45)
 
 
+# returns year and semester number according to
+# the date of first Monday of a semester
+def semester(startDate) -> typing.Tuple[str, int]:
+    year = ""
+    semester = 0
+    if startDate.month < 7:
+        semester    = 2
+        year        = str(startDate.year - 1) + '-' + str(startDate.year)
+    else:
+        semester    = 1
+        year        = str(startDate.year) + '-' + str(startDate.year + 1)
+
+    return year, semester
+
+
 class StopLoop(RuntimeError):
     pass
-
-
-class CrawlerError(RuntimeError):
-    def __init__(self, error_message):
-        super(CrawlerError, self).__init__(error_message)
 
 
 class UTC(datetime.tzinfo):
