@@ -14,7 +14,7 @@ a = Analysis(['main.py',
 './excelParser/processExcel.py',
 './excelParser/syntaxParser.py',
 './interface/__init__.py',
-'./interface/cmdInput.p',
+'./interface/cmdInput.py',
 './interface/config.py',
 './interface/icalOutput.py'
 ],
