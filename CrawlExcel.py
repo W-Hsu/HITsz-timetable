@@ -55,9 +55,13 @@ def login(loginFormPage, allLoginParams):
     allLoginParams["username"] = config.CrawlerParams.username
     allLoginParams["password"] = config.CrawlerParams.password
 
-    # Request a page
+    # Login!
+    # Get a validated COOKIE for our session.
     response = sess.post(config.domain+loginFormPage, params=allLoginParams)
 
+    # TODO
+    # In addition to checking status code,
+    # We shall check the web-contents to make sure we're successfully logged in.
     if response.status_code != 200:
         print(str(response.status_code))
         raise HTTPError("Login Failed!")
@@ -77,7 +81,9 @@ def getExcelRawData(UID) -> bytes:
         "format": "excel",
         "_filename_": "export"
     }
-    # YES. I think that's ugly too. But I'm lazy ;)
+
+    # It seems to be a json-like stuff.
+    # inelegant, indeed. But I'm too lazy to make a change. ;)
     excel_params["reportlets"] = """%5B%7B%22reportlet%22%3A%22%2Fbyyt%2Fpkgl%2F%E5%AD%A6%E7%94%9F%\
 E4%B8%BB%E9%A1%B5%E8%AF%BE%E8%A1%A8%E5%AF%BC%E5%87%BA.cpt%22%2C%22xn%22%3A%222020-2021%22%2C%22xq%2\
 2%3A%22 2 %22%2C%22dm%22%3A%22""" + UID + "%22%7D%5D"
