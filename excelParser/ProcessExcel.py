@@ -2,22 +2,31 @@
 
 from io import BytesIO
 from excelParser import lexer, syntaxParser
+from interface import config
 
-import config
-import openpyxl
+import typing
 import re
+import openpyxl
 import misc
 
-def process(excel_raw_data):
+def process(excel_raw_data) -> typing.Tuple[str, list]:
+
     if not isinstance(excel_raw_data, bytes):
         raise RuntimeError("")
 
     workbook = openpyxl.load_workbook(filename=BytesIO(excel_raw_data), read_only=True)
     worksheet= workbook.active
 
-    orig_col = 0
-    orig_row = 0
-
+    # Find the origin cell of the sheet
+    # Here is a simple illustration of the origin cell:
+    # +-----------------+--------+--
+    # | (Original Cell) | 星期一 | ...
+    # +-----------------+--------+--
+    # |     第1-2节     | ...
+    # +-----------------+
+    # | ...             |
+    orig_col = 3
+    orig_row = 1
     try:
         for i in range(1, 10):
             for col in range(1, i+1):
@@ -31,6 +40,8 @@ def process(excel_raw_data):
     except misc.StopLoop:
         pass
 
+    # get calendar name
+    cal_name = worksheet.cell(orig_col-2, orig_row).value
 
     # cal_data (calendar data): array of
     #   - Days (0=>Mon., 1=>Tue., ...): array of
@@ -50,4 +61,4 @@ def process(excel_raw_data):
 
         cal_data.append(every_day)
     
-    return cal_data
+    return cal_name, cal_data

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from errors import *
+from errors import SyntaxParseError
 
 def getWeeks(s) -> list:
     s = s[0:len(s)-1]
