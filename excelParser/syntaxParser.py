@@ -1,9 +1,24 @@
-# coding: utf-8
+# coding=utf-8
 
-from errors import SyntaxParseError
+from errors import ExcelParserError
 
+# TODO
+# 单双周？？
 def getWeeks(s) -> list:
     s = s[0:len(s)-1]
+
+    # deal with “单/双周” e.g. [1-16双周]
+    # common case: all are preserved
+    oddEvenFilter = lambda x: True
+    if s[len(s)-1]=='单':
+        # odd case
+        oddEvenFilter = lambda x: x%2==1
+        s = s[0:len(s)-1]
+    elif s[len(s)-1]=='双':
+        # even case
+        oddEvenFilter = lambda x: x%2==1
+        s = s[0:len(s)-1]
+
     s = s.split(",")
     ret_lst = []
     for i in s:
@@ -49,7 +64,7 @@ def parse(lex_list) -> list:
                 eachClass["name"] = item[1]
                 status = 1
             else:
-                raise SyntaxParseError("invalid syntax: attribute of no class")
+                raise ExcelParserError("Ill-formed Excel Cell: Attribute of no class.")
         elif status==1:
             if item[0]=="attr":
                 k, v = parse_attribute(item[1])
@@ -58,7 +73,7 @@ def parse(lex_list) -> list:
                 out.append(eachClass)
                 eachClass = {"name": item[1]}
             else:
-                raise SyntaxParseError("invalid syntax: (" + str(item[0]) + ", " + str(item[1]) + ") not supported.")
+                raise ExcelParserError("Invalid Syntax: (" + str(item[0]) + ", " + str(item[1]) + ") not supported.")
         
     out.append(eachClass)
     return out

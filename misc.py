@@ -1,4 +1,4 @@
-#! coding: utf-8
+# coding=utf-8
 
 import datetime
 import typing
@@ -52,8 +52,21 @@ def semester(startDate) -> typing.Tuple[str, int]:
     else:
         semester    = 1
         year        = str(startDate.year) + '-' + str(startDate.year + 1)
-
     return year, semester
+
+
+def colRow2ExcelCellName(col, row) -> str:
+    row_str = ""
+    if row<=0:
+        row_str = 'A'
+    else:
+        row_str = chr(ord('A') + col - 1)
+    
+    if col<=0:
+        col = 1
+    
+    return row_str + str(col)
+
 
 
 class StopLoop(RuntimeError):

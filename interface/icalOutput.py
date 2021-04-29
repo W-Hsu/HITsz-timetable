@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding=utf-8
 
 from interface import config
 
@@ -37,7 +37,7 @@ def output(cal_name, cal_data):
                 pass
     
     if config.OutputTarget.stdout:
-        print(str(ical.to_ical(), encoding="UTF-8"))
+        print(ical.to_ical().decode('utf-8').replace('\r\n', '\n'))
     else:
         with open(config.OutputTarget.filePath, "wb") as fp:
             fp.write(ical.to_ical())

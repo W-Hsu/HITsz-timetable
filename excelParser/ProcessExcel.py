@@ -1,13 +1,17 @@
-# coding: utf-8
+# coding=utf-8
 
 from io import BytesIO
 from excelParser import lexer, syntaxParser
 from interface import config
+from errors import ExcelParserError
 
+import warnings
 import typing
 import re
 import openpyxl
 import misc
+
+warnings.filterwarnings("ignore")
 
 def process(excel_raw_data) -> typing.Tuple[str, list]:
 
@@ -54,10 +58,12 @@ def process(excel_raw_data) -> typing.Tuple[str, list]:
 
     for i in range(1, 8):
         every_day = []
-        
         for j in range(1, 7):
-            lexer_lst = lexer.parse(worksheet.cell(orig_col+j, orig_row+i).value)
-            every_day.append(syntaxParser.parse(lexer_lst))
+            try:
+                lexer_lst = lexer.parse(worksheet.cell(orig_col+j, orig_row+i).value)
+                every_day.append(syntaxParser.parse(lexer_lst))
+            except ExcelParserError as ex:
+                raise ExcelParserError("Cell" + misc.colRow2ExcelCellName(orig_col+j, orig_row+i) + ": " + str(ex))
 
         cal_data.append(every_day)
     

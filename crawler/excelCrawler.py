@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding=utf-8
 
 from requests.models import HTTPError
 from interface import config
@@ -33,7 +33,7 @@ sess.headers.update({
 def get_text() -> typing.Tuple[str, dict]:
     response = sess.get(config.URLs.login_page)
     if response.status_code != 200:
-        raise HTTPError("Error getting login page.")
+        raise CrawlerError("Get Login Page: Server responded error code" + str(response.status_code) + ".")
 
     pageSoup = bs4.BeautifulSoup(response.text, "html.parser")
     formSoup = pageSoup.find("form")
@@ -60,24 +60,23 @@ def login(loginFormPage, allLoginParams):
     # Get a validated COOKIE for our session.
     response = sess.post(config.URLs.login_domain + loginFormPage, params=allLoginParams)
 
-    # TODO
-    # In addition to checking status code,
-    # We shall check the web-contents to make sure we're successfully logged in.
     if response.status_code != 200:
-        print(str(response.status_code))
-        raise HTTPError("Login Failed!")
-    else:
-        print("Login Successful!")
+        raise CrawlerError("Login: Server responded error code: " + str(response.status_code) + ".")
+    elif response.text.find("账号密码验证失败")!=-1:
+        raise CrawlerError("Login: Incorrect username or password.")
 
 
 def getExcelRawData() -> bytes:
-
     response = sess.post(config.URLs.uid_query)
+    if response.status_code!=200:
+        raise CrawlerError("Query User UID: Server responded error code" + str(response.status_code) + ".")
     try:
         j = json.loads(response.text)
         UID = j["ID"]
     except json.JSONDecodeError:
-        raise CrawlerError("Get UID from session failed!")
+        raise CrawlerError("Query User UID: Get userinfo json from session failed.")
+    except KeyError:
+        raise CrawlerError("Query User UID: Cannot find id in requested userinfo json.")
     
     excel_params = {
         "format": "excel",
@@ -93,8 +92,9 @@ E4%B8%BB%E9%A1%B5%E8%AF%BE%E8%A1%A8%E5%AF%BC%E5%87%BA.cpt%22%2C%22xn%22%3A%22"""
 
     response = sess.post(config.URLs.excel_export, params=excel_params)
     if response.status_code != 200:
-        raise HTTPError(str(response.status_code))
-    else:
-        pass
+        raise CrawlerError("Get Excel: Server responded error code" + response.status_code + ".")
+    elif response.headers["content-type"].find("excel")==-1 and\
+         response.headers["content-type"].find("xls")==-1:
+        raise CrawlerError("Get Excel: Server not responding excel format.")
 
     return response.content
