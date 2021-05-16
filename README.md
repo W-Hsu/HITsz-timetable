@@ -2,6 +2,10 @@
 
 该项目目前正在维护+上新之中。
 
+![screenshot](https://gitee.com/sulphuricacid/image-base/raw/master/2021/HITsz-timetable/IMG_1968.jpg)
+
+截图：至暗时刻
+
 自动爬取由`jw.hitsz.edu.cn`导出的Excel课表文件，并生成**iCal**\(iCalendar, a.k.a. Webcal [Wiki](https://en.wikipedia.org/wiki/ICalendar) [百度百科](https://baike.baidu.com/item/iCal)\)格式的日历信息。
 
 虽然iCalendar格式由Apple首先发布，但是该格式目前已经成为事实上的标准。Microsoft Outlook、Google Calendar等带有
@@ -9,13 +13,13 @@
 
 ## Changelog
 
-### v1.1
+### v0.2-beta
 
 * 新增：自动从教务系统爬取校历，无需手动输入第一周星期一的日期！
 
 * 新增：可以生成考试信息啦！
 
-### v1.0
+### v0.1-alpha
 
 * 基本功能：生成本学期所有课的课表。只需要输入本学期第一周第一个星期一的日期！
 
@@ -23,19 +27,19 @@
 
 ## CLI参数说明
 
-  * 必需参数：
-    * `-u [Username]`     指定用户名
-      **例子**：我的学号是123456789，想要获取当前学期的课表，命令行参数就设置为：
-      `-u 123456789`
-  * 可选参数：
-    * `--year [Year]`     指定学期开始的年份
-    * `--sem [Semester]`  指定学期（可选项`autumn, fall, spring, summer`，秋秋春夏）
-    * `-p [Password]`     指定密码。如果不想在shell中留下痕迹可以不填，在运行时会要求输入。
-    * `-f [FilePath]`     指定输出ics文件的路径
-    * `--stdout`          将ics文件内容写到标准输出，优先级比`-f`选项高。就是说，指定`--stdout`之后，`-f`就没用了。
-      **例子**：我的学号是123456789，密码是__9876543，想要获取2021年春季学期学期的课表，并输出到`D`盘下的
-      `123.ics`文件中，命令行参数就设置为：
-      `-u 123456789 -p __9876543 --year 2021 --sem spring -f D:/123.ics`
+* 必需参数：
+  * `-u [Username]`     指定用户名
+    **例子**：我的学号是123456789，想要获取当前学期的课表，命令行参数就设置为：
+    `-u 123456789`
+* 可选参数：
+  * `--year [Year]`     指定学期开始的年份
+  * `--sem [Semester]`  指定学期（可选项`autumn, fall, spring, summer`，秋秋春夏）
+  * `-p [Password]`     指定密码。如果不想在shell中留下痕迹可以不填，在运行时会要求输入。
+  * `-f [FilePath]`     指定输出ics文件的路径
+  * `--stdout`          将ics文件内容写到标准输出，优先级比`-f`选项高。就是说，指定`--stdout`之后，`-f`就没用了。
+    **例子**：我的学号是123456789，密码是__9876543，想要获取2021年春季学期学期的课表，并输出到`D`盘下的
+    `123.ics`文件中，命令行参数就设置为：
+    `-u 123456789 -p __9876543 --year 2021 --sem spring -f D:/123.ics`
 
 ## 第三方库依赖（通过脚本源码运行时需要）
 
