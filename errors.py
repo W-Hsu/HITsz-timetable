@@ -12,4 +12,4 @@ class CrawlerError(RuntimeError):
 
 class ExcelParserError(RuntimeError):
     def __init__(self, error_str):
-        super(SyntaxParseError, self).__init__(error_str)
+        super(ExcelParserError, self).__init__(error_str)

@@ -5,3 +5,4 @@ __pycache__
 *.ics
 dist
 build
+main.spec

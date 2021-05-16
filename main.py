@@ -1,21 +1,25 @@
 # coding=utf-8
 
-from interface import cmdInput, config, icalOutput
+from interface import cmdInput, icalOutput
 from excelParser import processExcel
-from crawler import excelCrawler
+from crawler import crawlerSession, excelCrawler, schoolCalendarCrawler
 
 import click
-import misc
-import datetime
 # import genIcs
 
 def main():
-    form_url, form_inputs = excelCrawler.get_text()
-    excelCrawler.login(form_url, form_inputs)
+    # login
+    form_url, form_inputs = crawlerSession.get_login_page()
+    crawlerSession.login(form_url, form_inputs)
+
+    # get semester
+    firstMonday = schoolCalendarCrawler.getSchoolCal()
+
+    # get excel data
     excelRawBytes = excelCrawler.getExcelRawData()
 
     cal_name, cal_data = processExcel.process(excelRawBytes)
-    icalOutput.output(cal_name, cal_data)
+    icalOutput.output(cal_name, cal_data, firstMonday)
 
 
 @click.command()
@@ -24,31 +28,27 @@ def main():
     help="Username")
 @click.option(
     '--password', '-p',
-    help="Password",
+    help="Password ,can be input interactively",
     hide_input=True,
     prompt="Enter Password")
 @click.option(
     '--filepath', '-f',
     help="ics file path to be written. If not specified, contents will be written to stdout")
 @click.option(
-    '-y',
+    '--year',
     type=int,
-    help="Date of 1st Monday of the 1st week: year")
+    help="Year that the semester is in, omittable. e.g.'2019' p.s. no need for '2019-2020'")
 @click.option(
-    '-m',
-    type=int,
-    help="Date of 1st Monday of the 1st week: month")
-@click.option(
-    '-d',
-    type=int,
-    help="Date of 1st Monday of the 1st week: day")
+    '--sem',
+    type=str,
+    help="Semester name, omittable. available vals: 'fall', 'autumn', 'spring', 'summer'")
 @click.option(
     '--stdout',
     help="Write iCalendar file content to stdout, this will override --filepath option",
     is_flag=True)
-def execute(username, password, filepath, y, m, d, stdout):
+def execute(username, password, filepath, year, sem, stdout):
     cmdInput.parseLoginParams(username, password)
-    cmdInput.parseStartDate(y, m, d)
+    cmdInput.parseYearSem(year, sem)
     cmdInput.parseOutputTarget(filepath, stdout)
     main()
 
