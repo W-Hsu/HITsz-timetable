@@ -7,7 +7,6 @@ from errors import ExcelParserError
 
 import warnings
 import typing
-import re
 import openpyxl
 import misc
 
@@ -23,12 +22,12 @@ def process(excel_raw_data) -> typing.Tuple[str, list]:
 
     # Find the origin cell of the sheet
     # Here is a simple illustration of the origin cell:
-    # +-----------------+--------+--
-    # | (Original Cell) | 星期一 | ...
-    # +-----------------+--------+--
-    # |     第1-2节     | ...
-    # +-----------------+
-    # | ...             |
+    # +---------------+--------+--
+    # | (Origin Cell) | 星期一 | ...
+    # +---------------+--------+--
+    # |    第1-2节    | ...
+    # +---------------+----
+    # | ...           | ...
     orig_col = 3
     orig_row = 1
     try:

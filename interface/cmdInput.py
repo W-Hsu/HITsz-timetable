@@ -33,11 +33,14 @@ def parseYearSem(year, sem):
     # process year
     if year==None:
         year = now.tm_year
+
+    trueyear = year
     if sem=="1":
         year = str(year) + "-" + str(year+1)
     else:
         year = str(year-1) + "-" + str(year)
 
+    config.Semester.trueyear = trueyear
     config.Semester.year = year
     config.Semester.sem  = sem
 

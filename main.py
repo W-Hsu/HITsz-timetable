@@ -2,7 +2,7 @@
 
 from interface import cmdInput, icalOutput
 from excelParser import processExcel
-from crawler import crawlerSession, excelCrawler, schoolCalendarCrawler
+from crawler import crawlerSession, examCrawler, excelCrawler, schoolCalendarCrawler
 
 import click
 # import genIcs
@@ -18,8 +18,11 @@ def main():
     # get excel data
     excelRawBytes = excelCrawler.getExcelRawData()
 
+    # get exam data
+    exam_lst = examCrawler.getExamDates()
+
     cal_name, cal_data = processExcel.process(excelRawBytes)
-    icalOutput.output(cal_name, cal_data, firstMonday)
+    icalOutput.output(cal_name, cal_data, exam_lst, firstMonday)
 
 
 @click.command()

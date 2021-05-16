@@ -26,7 +26,7 @@ def getSchoolCal() -> datetime.datetime:
         raise CrawlerError("Get School Calendar: Server responded error code" + response.status_code + ".")
     
     try:
-        j = json.loads(response.text)
+        j = json.loads(response.text.replace("\r\n", ""))
         startMonday_raw = j["xlList"][7]["MON"]
         startMonday = datetime.datetime.strptime(startMonday_raw, "%Y-%m-%d")
     except json.JSONDecodeError:

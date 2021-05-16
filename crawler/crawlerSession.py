@@ -71,7 +71,7 @@ def getUID() -> str:
     if response.status_code!=200:
         raise CrawlerError("Query User UID: Server responded error code" + str(response.status_code) + ".")
     try:
-        j = json.loads(response.text)
+        j = json.loads(response.text.replace("\r\n", ""))
         UID = j["ID"]
     except json.JSONDecodeError:
         raise CrawlerError("Query User UID: Get userinfo json from session failed.")
