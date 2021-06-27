@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from interface import cmdInput, config, icalOutput
-from excelParser import processExcel
+from excelParser import ProcessExcel as processExcel
 from crawler import excelCrawler
 
 import click

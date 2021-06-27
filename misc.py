@@ -46,8 +46,12 @@ def get_class_end_time(i) -> datetime.timedelta:
 def semester(startDate) -> typing.Tuple[str, int]:
     year = ""
     semester = 0
-    if startDate.month < 7:
+    if startDate.month < 6:
         semester    = 2
+        year        = str(startDate.year - 1) + '-' + str(startDate.year)
+    # 增加小学期
+    elif startDate.month < 8:
+        semester    = 3
         year        = str(startDate.year - 1) + '-' + str(startDate.year)
     else:
         semester    = 1
